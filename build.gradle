@@ -1,0 +1,69 @@
+group 'idu1550'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'git-dependencies'
+
+sourceCompatibility = 1.7
+
+mainClassName = "ee.ttu.idu1550.h2.Start"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'org.batcha.gradle.plugins:git-dependencies:0.2'
+    }
+}
+
+project.ext {
+    v = [
+            junit: '4.10',
+            cofoja: '1.1-r150',
+    ]
+
+    cofoja = files("lib/cofoja-1.1-r150.jar")
+
+    outputContractsDir = files('build/classes/main') {
+        builtBy('compileContracts')
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile('com.google.java.contract:cofoja:1.1-r150') //.ext.git = 'https://github.com/nhatminhle/cofoja.git'
+    compile cofoja
+    testCompile 'junit:junit:4.11'
+}
+
+compileJava {
+    options.compilerArgs = ['-proc:none']
+}
+
+task compileContracts(type: JavaCompile) {
+    source = sourceSets.main.java.srcDirs
+    classpath = cofoja
+    destinationDir = outputContractsDir as File
+    options.compilerArgs = ['-classpath',
+                            "lib/cofoja-1.1-r150.jar", '-processor',
+                            'com.google.java.contract.core.apt.AnnotationProcessor',
+                            '-proc:only']
+}
+
+run {
+    jvmArgs "-javaagent:lib/cofoja-${v.cofoja}.jar"
+}
+
+test {
+    jvmArgs "-javaagent:lib/cofoja-${v.cofoja}.jar"
+
+}
+
+compileTestJava {
+    compileContracts.execute();
+}
