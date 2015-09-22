@@ -65,7 +65,7 @@ public class PolarPoint implements Point {
     }
 
     @Override
-    public void scale(int factor) {
+    public void scale(Double factor) {
         this.rho *= factor;
     }
 

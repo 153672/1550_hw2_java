@@ -34,5 +34,5 @@ public interface Point {
     void centerRotate(double angle);
 
     @Requires("factor <= java.lang.Integer.MAX_VALUE")
-    void scale(int factor);
+    void scale(Double factor);
 }

@@ -49,7 +49,7 @@ public class CartesianPoint implements Point {
     }
 
     @Override
-    public void scale(int factor) {
+    public void scale(Double factor) {
         this.x *= factor;
         this.y *= factor;
     }
