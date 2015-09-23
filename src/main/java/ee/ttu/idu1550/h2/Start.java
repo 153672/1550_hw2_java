@@ -10,8 +10,10 @@ public class Start {
 
     public static void main(String [] args)
     {
-        Double x  = 1d;
+        Double x  = 2d;
         Point p = new CartesianPoint(x,1.0);
-
+        p.getX();
+        p.translate(2,5);
+        p.getTheta();
     }
 }

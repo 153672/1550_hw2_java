@@ -7,7 +7,7 @@ import com.google.java.contract.Requires;
 /**
  * Created by Mart Aarma on 13.09.2015.
  */
-@Invariant({"getX() != null", "getY() != null"})
+@Invariant({"getRho() == Math.sqrt(Math.pow(getX(),2) + Math.pow(getY(),2))"})
 public interface Point {
 
     @Ensures("result != null")
@@ -16,23 +16,27 @@ public interface Point {
     @Ensures("result != null")
     Double getY();
 
-    @Ensures("result >= 0")
     double getRho();
 
+    @Ensures("0 <= getTheta() && getTheta() <= (Math.PI * 2)")
     double getTheta();
 
-    @Ensures("result >= 0")
+    @Ensures("result == vectorTo(other).getRho()")
     double getDistance(Point other);
 
+    @Ensures("getX() == other.getX() - old(getX()) && getY() == other.getY() - old(this.getY())")
     Point vectorTo(Point other);
 
+    @Ensures("getTheta() == (old(getTheta()) + angle) % (2 * Math.PI)")
     void rotate(Point p, double angle);
 
+    @Ensures("getX() == old(getX()) + dx && getY() == old(getY()) + dy")
     void translate(double dx, double dy);
 
-    @Requires("angle >= 0 && angle <= 2 * java.lang.Math.PI")
+    @Requires("angle >= 0 && angle <= 2 * Math.PI")
+    @Ensures("getTheta() % (2*Math.PI) == (old(getTheta()) + angle) % (2*Math.PI)")
     void centerRotate(double angle);
 
-    @Requires("factor <= java.lang.Integer.MAX_VALUE")
+    @Ensures("getX() == old(getX()) * factor && getY() == old(getY()) * factor")
     void scale(Double factor);
 }

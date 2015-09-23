@@ -22,7 +22,9 @@ public class CartesianPoint implements Point {
 
     @Override
     public double getTheta() {
-        return atan2(this.y, this.x);
+        double t = atan2(this.y, this.x);
+        //System.out.println(t);
+        return t;
     }
 
     @Override
